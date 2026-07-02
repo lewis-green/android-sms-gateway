@@ -13,10 +13,14 @@ name: Fork Build APK
 #   SIGNING_KEY_PASSWORD        key password
 #   SIGNING_STORE_PASSWORD      keystore password
 
+# Manual trigger for now: the reusable build-apk.yml marks the Firebase and
+# signing secrets as required, so the run fails at startup until they exist in
+# the fork. Once you've added the secrets below, switch back to a push trigger
+# (uncomment) for automatic builds on every push to master.
 on:
-  push:
-    branches: [master]
   workflow_dispatch:
+  # push:
+  #   branches: [master]
 
 jobs:
   build:
