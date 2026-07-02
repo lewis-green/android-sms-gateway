@@ -1,0 +1,32 @@
+name: Fork Build APK
+
+# Builds a signed APK/bundle for this fork on push to master (and on demand).
+# Reuses the upstream reusable workflow build-apk.yml.
+#
+# Requires these repository secrets to be configured in the fork
+# (Settings > Secrets and variables > Actions):
+#   GOOGLE_SERVICES_JSON        base64 of a google-services.json from YOUR
+#                               Firebase project registered for the applicationId
+#                               uk.co.pubinvest.smsgate
+#   SIGNING_KEY_STORE_BASE64    base64 of your signing keystore (.jks)
+#   SIGNING_KEY_ALIAS           key alias inside the keystore
+#   SIGNING_KEY_PASSWORD        key password
+#   SIGNING_STORE_PASSWORD      keystore password
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-apk.yml
+    with:
+      version-name: 1.0.${{ github.run_number }}
+      build-type: release
+    secrets:
+      google-services-json: ${{ secrets.GOOGLE_SERVICES_JSON }}
+      signing-key-store-base64: ${{ secrets.SIGNING_KEY_STORE_BASE64 }}
+      signing-key-alias: ${{ secrets.SIGNING_KEY_ALIAS }}
+      signing-key-password: ${{ secrets.SIGNING_KEY_PASSWORD }}
+      signing-store-password: ${{ secrets.SIGNING_STORE_PASSWORD }}
