@@ -363,13 +363,18 @@ class HomeFragment : Fragment() {
 
     private fun requestPermissionsAndStart() {
         val permissionsRequired =
-            listOf(
-                Manifest.permission.READ_PHONE_STATE,
-                Manifest.permission.READ_SMS,
-                Manifest.permission.RECEIVE_SMS,
-                Manifest.permission.SEND_SMS,
-                Manifest.permission.RECEIVE_MMS,
-            )
+            buildList {
+                add(Manifest.permission.READ_PHONE_STATE)
+                add(Manifest.permission.READ_SMS)
+                add(Manifest.permission.RECEIVE_SMS)
+                add(Manifest.permission.SEND_SMS)
+                add(Manifest.permission.RECEIVE_MMS)
+                // READ_PHONE_NUMBERS is a runtime permission from API 26; needed for
+                // SubscriptionManager.getPhoneNumber() to return the SIM's number.
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    add(Manifest.permission.READ_PHONE_NUMBERS)
+                }
+            }
                 .filter {
                     ContextCompat.checkSelfPermission(
                         requireContext(),
